@@ -12,6 +12,8 @@ export const api = axios.create({ baseURL });
 api.interceptors.request.use(async (config) => {
   const { data } = await supabase.auth.getSession();
   const token = data.session?.access_token;
+  console.log(data, token);
+  
 
   // Supabase Functions expects a Bearer token for user-authenticated calls
   if (token) {
