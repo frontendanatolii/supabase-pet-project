@@ -1,10 +1,10 @@
 "use client";
 
 import { useEffect } from "react";
+
 import { useRouter } from "next/navigation";
 import { Auth } from "@supabase/auth-ui-react";
 import { ThemeSupa } from "@supabase/auth-ui-shared";
-
 import { supabase } from "@/lib/supabase";
 import { useAuth } from "@/providers/AuthProvider";
 import { Card } from "@/components/ui/card";
@@ -18,11 +18,7 @@ export default function AuthPage() {
     if (user) router.replace("/onboarding");
   }, [user, loading, router]);
 
-  // IMPORTANT: redirect to callback so it can exchange ?code=... for session
-  const redirectTo =
-    typeof window !== "undefined"
-      ? `${window.location.origin}/auth/callback`
-      : undefined;
+  const redirectTo = typeof window !== "undefined" ? `${window.location.origin}/onboarding` : undefined;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
@@ -31,7 +27,6 @@ export default function AuthPage() {
           <h1 className="text-xl font-semibold">Sign in</h1>
           <p className="text-sm text-slate-600">Use email/password or Google OAuth.</p>
         </div>
-
         <Auth
           supabaseClient={supabase}
           providers={["google"]}
