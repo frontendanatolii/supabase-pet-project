@@ -1,57 +1,43 @@
 "use client";
 
-import { Suspense, useEffect } from "react";
-import { useRouter, useSearchParams } from "next/navigation";
-import { supabase } from "@/lib/supabase";
+import { useEffect } from "react";
 
-function CallbackInner() {
+import { useRouter } from "next/navigation";
+import { Auth } from "@supabase/auth-ui-react";
+import { ThemeSupa } from "@supabase/auth-ui-shared";
+import { supabase } from "@/lib/supabase";
+import { useAuth } from "@/providers/AuthProvider";
+import { Card } from "@/components/ui/card";
+
+export default function AuthPage() {
+  const { user, loading } = useAuth();
   const router = useRouter();
-  const params = useSearchParams();
 
   useEffect(() => {
-    const error = params.get("error");
-    const errorDescription = params.get("error_description");
-    const code = params.get("code");
+    if (loading) return;
+    if (user) router.replace("/onboarding");
+  }, [user, loading, router]);
 
-    if (error) {
-      router.replace(`/auth?error=${encodeURIComponent(errorDescription ?? error)}`);
-      return;
-    }
-
-    if (!code) {
-      router.replace("/auth");
-      return;
-    }
-
-    (async () => {
-      const { error } = await supabase.auth.exchangeCodeForSession(code);
-
-      if (error) {
-        router.replace(`/auth?error=${encodeURIComponent(error.message)}`);
-        return;
-      }
-
-      router.replace("/onboarding");
-    })();
-  }, [params, router]);
+  const redirectTo =
+  typeof window !== "undefined"
+    ? `${window.location.origin}/auth/callback`
+    : undefined;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
-      <div className="text-sm text-slate-700">Signing you in…</div>
-    </div>
-  );
-}
-
-export default function CallbackPage() {
-  return (
-    <Suspense
-      fallback={
-        <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
-          <div className="text-sm text-slate-700">Signing you in…</div>
+      <Card className="w-full max-w-md p-6">
+        <div className="mb-4">
+          <h1 className="text-xl font-semibold">Sign in</h1>
+          <p className="text-sm text-slate-600">Use email/password or Google OAuth.</p>
         </div>
-      }
-    >
-      <CallbackInner />
-    </Suspense>
+        <Auth
+          supabaseClient={supabase}
+          providers={["google"]}
+          redirectTo={redirectTo}
+          appearance={{ theme: ThemeSupa }}
+          theme="light"
+        />
+      </Card>
+    </div>
   );
 }
