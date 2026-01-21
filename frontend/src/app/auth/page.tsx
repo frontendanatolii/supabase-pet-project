@@ -18,7 +18,10 @@ export default function AuthPage() {
     if (user) router.replace("/onboarding");
   }, [user, loading, router]);
 
-  const redirectTo = typeof window !== "undefined" ? `${window.location.origin}/onboarding` : undefined;
+  const redirectTo =
+  typeof window !== "undefined"
+    ? `${window.location.origin}/auth/callback`
+    : undefined;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-slate-50 p-6">
