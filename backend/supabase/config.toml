@@ -1,0 +1,18 @@
+project_id = "supabase-test-task-v3"
+
+[api]
+# default ports used by `supabase start`
+port = 54321
+
+[db]
+port = 54322
+
+[studio]
+port = 54323
+
+[auth]
+enabled = true
+
+[functions]
+[functions.api]
+verify_jwt = true

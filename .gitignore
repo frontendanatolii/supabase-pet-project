@@ -1,0 +1,24 @@
+# dependencies
+**/node_modules/
+
+# Next.js
+frontend/.next/
+frontend/out/
+frontend/.vercel/
+
+# env files
+frontend/.env.local
+frontend/.env.*.local
+backend/supabase/.env
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS
+.DS_Store
+
+# build
+**/dist/
